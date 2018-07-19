@@ -240,21 +240,28 @@ public class Torus {
 			int goalChecked = 0;
 			int maxStackSize = Integer.MIN_VALUE;
 			while (true) {
+				//push initial board into stack
 				stack.push(init);
 				prefix.add(init);
 				while (!stack.isEmpty()) {
 					//perform iterative deepening; implement prefix list
+					//pop the last state in the stack (remove it and return it value)
 					State curr = stack.pop();
+					
+					//clear the list
 					if (!curr.equals(init)) {
 						if (prefix.indexOf(curr.parentPt) + 1 <= prefix.size()) {
 							prefix.subList(prefix.indexOf(curr.parentPt) + 1, prefix.size()).clear();
 						}
+						//add the current state to the list
 						prefix.add(curr);
 					}
+					
+					//check if goal
 					curr.printState(option);
 					if (curr.isGoalState() == true) {
 						break;
-					} else if (curr.depth < cutoff) {
+					} else if (curr.depth < cutoff) {//get successors
 						for (int i = 0; i < curr.getSuccessors().length; i++) {
 							State currSuccessors = curr.getSuccessors()[i];
 							if (!containNode(prefix, currSuccessors)) {
